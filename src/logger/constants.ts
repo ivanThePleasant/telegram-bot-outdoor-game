@@ -1,3 +1,6 @@
 export const LOGGER_CONTEXT = {
-  botInit: 'BOT INIT'
+  appInit: 'APP INIT',
+  serverInit: 'SERVER INIT',
+  botInit: 'BOT INIT',
+  dbInit: 'DB INIT',
 }

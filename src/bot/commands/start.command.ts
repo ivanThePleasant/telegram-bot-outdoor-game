@@ -7,7 +7,7 @@ import { TYPES } from '@/types-di';
 
 @injectable()
 export class StartCommand extends Command {
-  constructor(@inject(TYPES.Bot) bot: Telegraf<IBotContext>) {
+  constructor(@inject(TYPES.BotService) bot: Telegraf<IBotContext>) {
     super(bot)
   }
 

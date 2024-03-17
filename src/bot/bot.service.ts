@@ -1,15 +1,15 @@
 import 'reflect-metadata';
 import { injectable, inject } from 'inversify';
-import { TYPES } from './types-di';
+import { TYPES } from '../types-di';
 import { Telegraf, session } from 'telegraf';
-import { IConfigService } from './config';
-import { ILoggerService, LOGGER_CONTEXT } from './logger';
+import { IConfigService } from '../config';
+import { ILoggerService, LOGGER_CONTEXT } from '../logger';
 import { IBotContext } from '@/context/context.interface';
 import { Command } from './commands/command.class';
 import { StartCommand } from './commands/start.command';
 
 @injectable()
-export class Bot {
+export class BotService {
 	bot: Telegraf<IBotContext>;
 	commands: Command[] = [];
 
@@ -22,19 +22,26 @@ export class Bot {
 	}
 
 	public init() {
-		this.logger.log(`[${LOGGER_CONTEXT.botInit}] - Initializing bot and services`);
-    this.logger.log(`[${LOGGER_CONTEXT.botInit}] - Registerring bot commands`);
-    this.commands = [new StartCommand(this.bot)]
+		this.logger.log(`[${LOGGER_CONTEXT.appInit}] - Initializing app`);
+
+		// Init bot commands
+		this.logger.log(`[${LOGGER_CONTEXT.botInit}] - Registerring bot commands`);
+		this.commands = [new StartCommand(this.bot)];
 		for (const command of this.commands) {
 			command.handle();
 		}
+
+		// Init bot
 		this.bot.launch();
-    this.logger.log(`[${LOGGER_CONTEXT.botInit}] - Setting commands menu via API`);
-    
-		this.logger.log(`[${LOGGER_CONTEXT.botInit}] - Bot init complete`);
+
+		// Set bot menu button and commands
+		this.logger.log(`[${LOGGER_CONTEXT.botInit}] - Setting commands menu via API`);
+
+		// Complete init
+		this.logger.log(`[${LOGGER_CONTEXT.appInit}] - App init complete`);
 	}
 
-  public stop(signal: 'SIGINT' | 'SIGTERM') {
-    this.bot.stop(signal)
-  }
+	public stop(signal: 'SIGINT' | 'SIGTERM') {
+		this.bot.stop(signal);
+	}
 }
